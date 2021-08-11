@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.webapp.model.Products" table="PRODUCTS">
+		<id name="id" type="int" column="ID" >
+			<generator class="increment"/>
+		</id>
+		<property name="category">
+			<column name="CATEGORY"/>
+		</property>
+		<property name="title">
+			<column name="TITLE"/>
+		</property>
+		<property name="description">
+			<column name="DESCRIPTION"/>
+		</property>
+		<property name="price">
+			<column name="PRICE"/>
+		</property>
+		<property name="month">
+			<column name="MONTH"/>
+		</property>
+		<property name="username">
+			<column name="USERNAME"/>
+		</property>
+	</class>
+</hibernate-mapping>
