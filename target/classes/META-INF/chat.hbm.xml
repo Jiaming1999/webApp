@@ -16,5 +16,14 @@
 		<property name="date">
 			<column name="Date"/>
 		</property>
+		<property name="movie">
+			<column name="MOVIE"/>
+		</property>
+		<property name="movieRating">
+			<column name="MOVIERATING"/>
+		</property>
+		<property name="movieActors">
+			<column name="MOVIEACTORS"/>
+		</property>
 	</class>
 </hibernate-mapping>

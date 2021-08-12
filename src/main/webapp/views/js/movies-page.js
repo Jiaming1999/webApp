@@ -1,25 +1,40 @@
 $(document).ready(() => {
-    if($('#searchText'==null)){
-        //getTopMovies();
-    }
-    // let entityMovie = sessionStorage.getItem("movieId");
-    // if(entityMovie!= null){
-    //     getMoviestemp(entityMovie);
-    //     sessionStorage.removeItem("movieId");
-    // }
+       defaultSearch();
+       //getTopMoviesImdb();
     $('#searchForm').on('submit', (e) => {
         let searchText = $('#searchText').val();
-        getMoviestemp(searchText);
+        getMovies(searchText);
         e.preventDefault();
 });
 });
 
-//for movie detail button.
-function movieSelected(id){
-    sessionStorage.setItem('movieId',id);
+function  getMoviesChat(rating,actors){
+    let output ='';
+    output+= sessionStorage.getItem("movieTitle");
+    // output+=',';
+    // output+= rating;
+    // output+=',';
+    // output+= actors;
+    $('#chatMovieId').html(output);
 }
 
-function getMoviestemp(searchText){
+function getMoviesChat2(){
+    let output ='';
+    output+=sessionStorage.getItem("movieTitle");
+    output+=",";
+    output+=sessionStorage.getItem("movieRating");
+    output+=",";
+    output+=sessionStorage.getItem("movieActors");
+    $('#chatMovieId').html(output);
+}
+
+//for movie detail button.
+function movieSelected(id,title){
+    sessionStorage.setItem('movieId',id);
+    sessionStorage.setItem('movieTitle',title);
+}
+
+function getMovies(searchText){
     axios.get('http://www.omdbapi.com/?apikey=f9abc5cc&s='+searchText)
         .then((response) => {
             console.log(response);
@@ -32,7 +47,7 @@ function getMoviestemp(searchText){
                         <img src="${movie.Poster}"> 
                         <h5>${movie.Title}</h5>
                         <h6>${movie.Year}</h6>
-                        <a onclick="movieSelected('${movie.imdbID}')" class="btn btn-primary" href="http://localhost:8081/webApp_war/router/user/moviedetails">Movie Details</a>
+                        <a onclick="movieSelected('${movie.imdbID}','${movie.Title}')" class="btn btn-primary" href="http://localhost:8081/webApp_war/router/user/moviedetails">Movie Details</a>
                     </div>
                 </div> 
                 `;
@@ -44,7 +59,7 @@ function getMoviestemp(searchText){
         })
 }
 
-function getmovietemp(){
+function getMovieDetails(){
     let movieId = sessionStorage.getItem('movieId');
     axios.get('http://www.omdbapi.com/?apikey=f9abc5cc&i='+movieId)
         .then((response) => {
@@ -70,15 +85,46 @@ function getmovietemp(){
                  </ul>
                 </div>
             </div>
+            
             <div class="row"> 
             <div class="well"> 
             <a href="http://imdb.com/title/${movie.imdbID}" target="_blank" class="btn btn-primary">View IMDB</a>
             <a href="http://localhost:8081/webApp_war/router/user/movies" class="btn">Back to search</a>
+            <a onclick="chatAttribute('${movie.imdbRating}','${movie.Actors}')" class="btn btn-primary" href="http://localhost:8081/webApp_war/router/user/moviedetails">Get Movie Details</a>
             </div>
             </div>
             `;
             $('#movie').html(output);
-            sessionStorage.setItem("title",)
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+}
+
+function chatAttribute(rating,actors){
+    sessionStorage.setItem("movieRating",rating);
+    sessionStorage.setItem("movieActors",actors);
+}
+
+function defaultSearch(){
+    axios.get('http://www.omdbapi.com/?apikey=f9abc5cc&s=spider man')
+        .then((response) => {
+            console.log(response);
+            let movies = response.data.Search;
+            let output = '';
+            $.each(movies, (index, movie) => {
+                output+=` 
+                <div class="col-md-3">
+                    <div class="well text-center">
+                        <img src="${movie.Poster}"> 
+                        <h5>${movie.Title}</h5>
+                        <h6>${movie.Year}</h6>
+                        <a onclick="movieSelected('${movie.imdbID}','${movie.Title}')" class="btn btn-primary" href="http://localhost:8081/webApp_war/router/user/moviedetails">Movie Details</a>
+                    </div>
+                </div> 
+                `;
+            });
+            $('#movies').html(output);
         })
         .catch((err)=>{
             console.log(err);
@@ -86,7 +132,7 @@ function getmovietemp(){
 }
 
 //displays searched text, from imdb.
-function getMovies(searchText){
+function getMoviesImdb(searchText){
     axios.get('https://imdb-api.com/en/API/SearchMovie/k_rstrkz43/'+searchText)
         .then((response) => {
             console.log(response);
@@ -111,7 +157,7 @@ function getMovies(searchText){
         })
 }
 //for movie details, from imdb.
-function getmovie(){
+function getmovieImdb(){
     let movieId = sessionStorage.getItem('movieId');
     axios.get('https://imdb-api.com/en/API/Title/k_rstrkz43/'+movieId)
         .then((response) => {
@@ -151,7 +197,7 @@ function getmovie(){
         })
 }
 //shows most popular movies, until user searches something, from imdb.
-function getTopMovies(){
+function getTopMoviesImdb(){
     axios.get('https://imdb-api.com/en/API/MostPopularMovies/k_rstrkz43')
         .then((response) => {
             console.log(response);

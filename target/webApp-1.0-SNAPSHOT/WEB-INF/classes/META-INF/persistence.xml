@@ -7,6 +7,7 @@
         <class>com.webapp.model.Products</class>
         <class>com.webapp.model.Users</class>
         <class>entity.Chat</class>
+        <class>entity.Moviehistory</class>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mariadb://localhost:3344/webapp"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>

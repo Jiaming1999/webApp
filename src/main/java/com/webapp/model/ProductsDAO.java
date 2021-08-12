@@ -1,6 +1,7 @@
 package com.webapp.model;
 
 import entity.Chat;
+import entity.Moviehistory;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -265,6 +266,38 @@ public class ProductsDAO implements IProductsDAO{
                 tx.rollback();
             }
             throw new ProductsManagementException("failed to add a message.");
+        }
+        //close connection.
+        finally {
+            if(sess != null) {
+                try {
+                    sess.close();
+                } catch(HibernateException e) {
+                    e.printStackTrace();
+                    throw new ProductsManagementException("Problem with a close session.");
+                }
+            }
+        }
+    }
+
+    @Override
+    public void addMovieHistory(Moviehistory moviehistory) throws ProductsManagementException {
+        //open session
+        Session sess = factory.openSession();
+        Transaction tx = null;
+
+        try{
+            tx = sess.beginTransaction();
+            //saves movie to the moviehistory table.
+            sess.save(moviehistory);
+
+            tx.commit();
+
+        } catch(HibernateException e) {
+            if(tx != null) {
+                tx.rollback();
+            }
+            throw new ProductsManagementException("failed to add a movie.");
         }
         //close connection.
         finally {

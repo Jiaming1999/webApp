@@ -5,7 +5,6 @@
   Time: 07:09
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <!-- CSS for movie display-->
@@ -30,7 +29,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="${pageContext.request.contextPath}/views/js/movies-page.js"></script>
-<script type="text/javascript"> getmovietemp();</script>
+<script type="text/javascript"> getMovieDetails();</script>
 </body>
 </html>
 

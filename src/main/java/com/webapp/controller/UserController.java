@@ -269,9 +269,27 @@ public class UserController extends BasicController{
 
     public void chat (HttpServletRequest request,HttpServletResponse response) throws ProductsManagementException {
         try {
+            //getting required data from http request.
             PrintWriter out = response.getWriter();
             String message = request.getParameter("message");
             String msgDelete = request.getParameter("id");
+            String movieTitle=null;
+            String movieActors=null;
+            String movieRating1;
+            double movieRating =0;
+            //movie field, optional.
+            String movieInfo = request.getParameter("chatMovieTitle");
+            if(movieInfo!=null){
+                String[] arr = movieInfo.split(",");
+                if(arr.length>=2){
+                    movieTitle=arr[0];
+                    movieRating1= arr[1];
+                    movieActors = arr[2];
+
+                    if(movieRating1!=null){
+                        movieRating = Double.parseDouble(movieRating1);
+                    } }
+            }
             try {
                 ProductsDAO dao = ProductsDAO.getInstance();
                 //getting session, to match products that belong to the user.
@@ -286,18 +304,26 @@ public class UserController extends BasicController{
                     List<Chat> chat = dao.getChat();
                     //if chat is empty.
                     if(chat.isEmpty()){
-                        chat.add(new Chat("default message","root",new Timestamp(System.currentTimeMillis())));
+                        chat.add(new Chat("default message","root",new Timestamp(System.currentTimeMillis()),"",0.0,""));
+                    }
+                    //adding the message to db.
+                    if(message!=null && message!=""){
+                        Chat chat1;
+                        if (movieInfo!=null){
+                             chat1 = new Chat(message,userName,new Timestamp(System.currentTimeMillis()),movieTitle,movieRating,movieActors);
+
+                        }else{
+                             chat1 = new Chat(message,userName,new Timestamp(System.currentTimeMillis()),null,0.0,null);
+                        }
+                        dao.addChatMessage(chat1);
+                    }else{
+                        if(msgDelete!=null && msgDelete!=""){
+                            dao.deleteChat(Integer.parseInt(msgDelete),userName);
+                        }
                     }
                     //for displaying chat in the chat.jsp file
                     session.setAttribute("chat", chat);
-                    //adding the message to db.
-                    if(message!=null && message!=""){
-                        Chat chat1 = new Chat(message,userName,new Timestamp(System.currentTimeMillis()));
-                        dao.addChatMessage(chat1);
-                    }
-                    if(msgDelete!=null && msgDelete!=""){
-                        dao.deleteChat(Integer.parseInt(msgDelete),userName);
-                    }
+
                 } else {
                     throw new ProductsManagementException("no chat yet.");
                 }

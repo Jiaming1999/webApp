@@ -18,5 +18,6 @@
 		<mapping resource="META-INF/products.hbm.xml"/>
 		<mapping resource="META-INF/users.hbm.xml"/>
 	    <mapping resource="META-INF/chat.hbm.xml"/>
+	    <mapping resource="META-INF/moviehistory.hbm.xml"/>
 </session-factory>
 </hibernate-configuration>

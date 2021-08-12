@@ -1,6 +1,7 @@
 package com.webapp.model;
 
 import entity.Chat;
+import entity.Moviehistory;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface IProductsDAO {
     public List<Chat> getChat() throws ProductsManagementException;
     public void addChatMessage(Chat chatMessage) throws ProductsManagementException;
     public void deleteChat(int id,String username)throws ProductsManagementException;
+    public void addMovieHistory(Moviehistory moviehistory)throws ProductsManagementException;
 }

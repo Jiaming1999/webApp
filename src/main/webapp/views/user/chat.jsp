@@ -23,6 +23,10 @@
     <div class="col-md-10 mx-auto">
         <div class="card card-body">
             <h3 class="text-center">Chat</h3>
+            <!-- javascript -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+            <script src="${pageContext.request.contextPath}/views/js/movies-page.js"></script>
 
             <form action="http://localhost:8081/webApp_war/router/user/chat" method="post">
                 <!-- error message -->
@@ -36,10 +40,13 @@
                 %>
 
                 <div class="input-group" style="margin-bottom:20px;">
-                    <input class="form-control" type="text" style="width:50px;" name="message">
-                    <span class="input-group-btn">
-						<button class="btn btn-success" type="submit">Send</button>
-				    </span>
+                    <div id="chatMovieId" class="well"></div>
+                </div>
+
+                <div class="input-group" style="margin-bottom:20px;">
+                    <input placeholder="Message" class="form-control" type="text" style="width:50px;" name="message">
+                    <input placeholder="MovieId (OPTIONAL)"  class="form-control" type="text" style="width:50px;" name="chatMovieTitle">
+                    <button id="submitBtn" class="btn btn-success" type="submit">Send</button>
                 </div>
 
                 <table class="table">
@@ -49,6 +56,9 @@
                         <th scope="col">Message</th>
                         <th scope="col">User</th>
                         <th scope="col">Time</th>
+                        <th scope="col">Movie</th>
+                        <th scope="col">Rating</th>
+                        <th scope="col">Actors</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -56,15 +66,23 @@
                         List<Chat> pl = (List<Chat>)session.getAttribute("chat");
                         if(pl!=null){
                             for(Chat p : pl){
+                                String movieCheck=p.getMovie();
                     %>
-                    <tr class="table-light">
-                        <td onclick=""><%out.println(p.getId()); %></td>
+                    <!-- table-success for, messages with movie -->
+                    <tr <% if(movieCheck==null){ %>  class="table-light">  <% }else { %> class="table-success" <% } %>
+                        <td ><%out.println(p.getId()); %></td>
                         <td><%out.println(p.getMessage());%></td>
                         <td><%out.println(p.getUser());%></td>
+                        <% if(p.getMovie()!=null){ %>
+                        <td><%out.println(p.getMovie());%></td>
+                        <td><%out.println(p.getMovieRating());%></td>
+                        <td><%out.println(p.getMovieActors());%></td>
+                        <%  }   %>
                         <td><%out.println(p.getDate());%></td>
+
                     </tr>
                     <%
-                        }
+                                 }
                     }
                     %>
                     </tbody>
@@ -79,5 +97,6 @@
         </div>
     </div>
 </div>
+<script type="text/javascript"> getMoviesChat2();  </script>
 </body>
 </html>
